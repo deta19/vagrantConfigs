@@ -6,3 +6,6 @@ you need to have hyper-V activated
 take a look at this article
 https://www.vagrantup.com/docs/hyperv/
 
+#after you have it activated on your machine, use:
+
+vagrant up --provider=hyperv
