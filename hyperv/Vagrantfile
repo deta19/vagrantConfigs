@@ -1,0 +1,13 @@
+Vagrant.configure("2") do |config|
+  config.vm.box = "generic/ubuntu1704"
+  config.vm.provider "hyperv"
+
+  config.vm.network "public_network"
+
+  config.vm.network "private_network", ip: "172.21.12.10", auto_config: false
+  config.vm.synced_folder "./public", "/home/vagrant/sync"
+
+  config.vm.provider :hyperv do |hyperv|
+    hyperv.vmname = "UbuntuVirtualMachine"
+  end
+end
