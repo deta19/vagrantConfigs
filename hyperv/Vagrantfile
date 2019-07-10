@@ -1,13 +1,16 @@
 Vagrant.configure("2") do |config|
-  config.vm.box = "generic/ubuntu1704"
-  config.vm.provider "hyperv"
+	config.vm.box = "generic/alpine38"
+	config.vm.provider "hyperv"
+	config.vagrant.plugins = ["vagrant-winnfsd", "vagrant-vbguest"]
 
-  config.vm.network "public_network"
+ 	config.vm.network "private_network", ip: "172.21.12.10", auto_config: false
+	 
+  	config.vm.synced_folder "./public", "/var/www/localhost/htdocs", disabled: false, type: "smb", smb_host: "192.168.1.4", smb_password: "mihai", smb_username:"mihai", mount_options: ['vers=3.0']
 
-  config.vm.network "private_network", ip: "172.21.12.10", auto_config: false
-  config.vm.synced_folder "./public", "/home/vagrant/sync"
+	config.vm.provider "hyperv" do |h|
+		h.memory = 768
+	end
 
-  config.vm.provider :hyperv do |hyperv|
-    hyperv.vmname = "UbuntuVirtualMachine"
-  end
+  	config.vm.provision :shell,  :path => "test.sh"
+
 end
