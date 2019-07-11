@@ -3,9 +3,7 @@ Vagrant.configure("2") do |config|
 	config.vm.provider "hyperv"
 	config.vagrant.plugins = ["vagrant-winnfsd", "vagrant-vbguest"]
 
- 	config.vm.network "private_network", ip: "172.21.12.10", auto_config: false
-	 
-  	config.vm.synced_folder "./public", "/var/www/localhost/htdocs", disabled: false, type: "smb", smb_host: "192.168.1.4", smb_password: "mihai", smb_username:"mihai", mount_options: ['vers=3.0']
+  	config.vm.synced_folder "./public", "/var/www/localhost/htdocs", disabled: false, type: "smb", smb_host: "localip", smb_password: "windowspass", smb_username:"windowsuser", mount_options: ['vers=3.0']
 
 	config.vm.provider "hyperv" do |h|
 		h.memory = 768
