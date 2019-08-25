@@ -1,0 +1,24 @@
+{
+    "private_network":"192.168.50.4",
+    "public_network":"192.168.50.10",
+    "memory":"768",
+    "cpus":"1",
+    "provider": "virtualbox",
+    "name": "hashicorp/precise64",
+    "folders":
+    {
+        "from":"./public",
+        "to":"/var/www"
+    },
+    "sites":
+    {
+        "map":"prestas.test",
+        "to":"/home/vagrant/share"
+    },
+    "ports":
+    {
+        "guest":"80",
+        "host":"8080"
+    },
+    "provision":"./provision.sh"
+}
