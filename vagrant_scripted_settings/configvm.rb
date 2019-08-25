@@ -24,7 +24,7 @@ def functionname(config)
     config.vm.synced_folder $settings['folders']['from'], $settings['folders']['to']
 
     
-    config.vm.hostname = 'example-box-guest'
+    # config.vm.hostname = 'example-box-guest'
     
     config.vm.provider $settings['provider'] do |prvder, override|
 		prvder.memory = $settings['memory']
