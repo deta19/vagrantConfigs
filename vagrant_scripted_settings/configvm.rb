@@ -16,7 +16,8 @@ def functionname(config)
     ENV["VAGRANT_DEFAULT_PROVIDER"] = $settings['provider']
 
     config.vm.box = $settings['name']
-
+    config.vm.box_url =  $settings['url']
+    
     config.vm.network :forwarded_port, guest: $settings['ports']['guest'], host: $settings['ports']['host']
 
     config.vm.network "private_network", ip: $settings['private_network']
@@ -24,7 +25,7 @@ def functionname(config)
     config.vm.synced_folder $settings['folders']['from'], $settings['folders']['to']
 
     
-    # config.vm.hostname = 'example-box-guest'
+    # config.vm.hostname = $settings['sites']['map']
     
     config.vm.provider $settings['provider'] do |prvder, override|
 		prvder.memory = $settings['memory']
@@ -38,12 +39,12 @@ def functionname(config)
         config.hostmanager.include_offline = true
         config.hostmanager.ignore_private_ip = false
 
-        config.vm.define 'example-box' do |node|
+        config.vm.define $settings['machine_name'] do |node|
             node.vm.network :private_network, ip: $settings['public_network']
             # node.hostmanager.aliases = %w(example-box.localdomain example-box-alias)
         end
     end
 
-    #config.vm.provision :shell,  :path =>  $settings['provision']
+    config.vm.provision :shell,  :path =>  $settings['provision']
 
 end

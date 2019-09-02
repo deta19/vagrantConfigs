@@ -1,10 +1,12 @@
 {
-    "private_network":"192.168.50.4",
-    "public_network":"192.168.50.10",
+    "machine_name" : "devmachine",
+    "private_network":"192.168.50.7",
+    "public_network":"192.168.50.17",
     "memory":"768",
     "cpus":"1",
     "provider": "virtualbox",
-    "name": "hashicorp/precise64",
+    "name": "trusty64",
+    "url": "https://oss-binaries.phusionpassenger.com/vagrant/boxes/latest/ubuntu-14.04-amd64-vbox.box",
     "folders":
     {
         "from":"./public",
@@ -12,8 +14,8 @@
     },
     "sites":
     {
-        "map":"prestas.test",
-        "to":"/home/vagrant/share"
+        "map":"dev.machine",
+        "to":"/var/www"
     },
     "ports":
     {
