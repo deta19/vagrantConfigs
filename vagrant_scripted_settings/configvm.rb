@@ -11,7 +11,7 @@ def functionname(config)
     $settings = JSON::parse(File.read($homesteadJsonPath))
 
     #add plugins
-    config.vagrant.plugins = ["vagrant-hostmanager"] # ["vagrant-winnfsd", "vagrant-vbguest"]
+    config.vagrant.plugins = ["vagrant-vbguest", "vagrant-hostmanager"] # ["vagrant-winnfsd", "vagrant-vbguest"]
 
     ENV["VAGRANT_DEFAULT_PROVIDER"] = $settings['provider']
 
@@ -22,10 +22,18 @@ def functionname(config)
 
     config.vm.network "private_network", ip: $settings['private_network']
 
-    config.vm.synced_folder $settings['folders']['from'], $settings['folders']['to']
+    config.vm.synced_folder $settings['folders']['from'], $settings['folders']['to'], auto_correct: true
 
-    
-    # config.vm.hostname = $settings['sites']['map']
+    vhost = ""
+
+    $settings['sites'].each do |maphost|
+        vhost +="<VirtualHost *:80>
+                    DocumentRoot "+maphost['svfolder']+"
+                    ServerName "+maphost['customalias']+"
+                    ServerAlias "+maphost['customalias']+"
+                </VirtualHost>
+                "
+    end
     
     config.vm.provider $settings['provider'] do |prvder, override|
 		prvder.memory = $settings['memory']
@@ -40,11 +48,27 @@ def functionname(config)
         config.hostmanager.ignore_private_ip = false
 
         config.vm.define $settings['machine_name'] do |node|
+
             node.vm.network :private_network, ip: $settings['public_network']
-            # node.hostmanager.aliases = %w(example-box.localdomain example-box-alias)
+            node.hostmanager.aliases =  $settings['sites'].map{ |items| items['customalias'] }
+            node.hostmanager.aliases.join(' ')
+
         end
+
+       
     end
 
-    config.vm.provision :shell,  :path =>  $settings['provision']
+    config.trigger.after :up do |trigger|
+        trigger.name = "updatevhostsmanual"
+        trigger.run_remote = {inline: "sudo echo '"+vhost+"' > /serverconfig/vhosts.conf"}
+        trigger.info = "updated /serverconfig/vhosts at vagrant up!!"
+    end
+    config.trigger.after :up do |triggertwo|
+        triggertwo.name = "secondrestart"
+        triggertwo.run_remote = {inline: "sudo service apache2 restart"}
+        triggertwo.info = "restart apache2 server vagrant up!!"
+    end
+
+    # config.vm.provision :shell,  :path =>  $settings['provision']
 
 end
