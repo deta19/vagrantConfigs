@@ -5,18 +5,20 @@
     "memory":"768",
     "cpus":"1",
     "provider": "virtualbox",
-    "name": "trusty64",
-    "url": "https://oss-binaries.phusionpassenger.com/vagrant/boxes/latest/ubuntu-14.04-amd64-vbox.box",
+    "name": "generic/ubuntu1804",
+    "url": "generic/ubuntu1804",
     "folders":
     {
         "from":"./public",
         "to":"/var/www"
     },
-    "sites":
-    {
-        "map":"dev.machine",
-        "to":"/var/www"
-    },
+    "sites":[
+        {
+            "customalias":"dev.machine",
+            "hostfolder":"./public",
+            "svfolder":"/var/www"
+        }
+    ],
     "ports":
     {
         "guest":"80",

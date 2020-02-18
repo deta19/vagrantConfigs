@@ -60,7 +60,7 @@ def functionname(config)
 
     config.trigger.after :up do |trigger|
         trigger.name = "updatevhostsmanual"
-        trigger.run_remote = {inline: "sudo echo '"+vhost+"' > /serverconfig/vhosts.conf"}
+        trigger.run_remote = {inline: "sudo echo '"+vhost+"' > ./serverconfig/vhosts.conf"}
         trigger.info = "updated /serverconfig/vhosts at vagrant up!!"
     end
     config.trigger.after :up do |triggertwo|
@@ -68,7 +68,8 @@ def functionname(config)
         triggertwo.run_remote = {inline: "sudo service apache2 restart"}
         triggertwo.info = "restart apache2 server vagrant up!!"
     end
-
-    # config.vm.provision :shell,  :path =>  $settings['provision']
+    if  ($settings['provision']  != '')
+        config.vm.provision :shell,  :path =>  $settings['provision']
+    end
 
 end
